@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutterappexample/BikeShareCity.dart';
+import 'package:flutterappexample/BikeShareList.dart';
+import 'package:flutterappexample/view_models/BikeShareRowViewModel.dart';
+
+import 'models/BikeShareCityResponse.dart';
 
 void main() => runApp(MyApp());
 
@@ -22,26 +25,20 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Fetch Data Example',
+      title: 'Bike Share Cities',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Fetch Data Example'),
+          title: Text('Bike Share Cities'),
         ),
         body: Center(
           child: FutureBuilder<BikeShareCityResponse>(
             future: futureBikeShare,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                return ListView.builder(
-                  itemCount: snapshot.data.networks.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return new ListTile(title: Text(snapshot.data.networks[index].name),
-                        subtitle: Text(snapshot.data.networks[index].location.city + ", " + snapshot.data.networks[index].location.country));
-                  },
-                );
+                return BikeShareList(snapshot.data.networks.listViewModels);
               } else if (snapshot.hasError) {
                 return Text("${snapshot.error}");
               }
